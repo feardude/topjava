@@ -1,6 +1,8 @@
 package ru.javawebinar.topjava.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class UserMeal {
 
@@ -22,5 +24,19 @@ public class UserMeal {
     }
     public int getCalories() {
         return calories;
+    }
+    public LocalTime getTime() {
+        return this.dateTime.toLocalTime();
+    }
+    public LocalDate getDate() {
+        return this.dateTime.toLocalDate();
+    }
+
+    public boolean isInRange (LocalTime start, LocalTime end) {
+        LocalTime time = this.getTime();
+        if ((time.isBefore(end) && time.isAfter(start))         // is inside range
+                || time.equals(start) || time.equals(end))      // check boundaries
+            return true;
+        return false;
     }
 }
