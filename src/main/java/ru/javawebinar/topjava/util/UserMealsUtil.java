@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
+import java.util.stream.Collector;
 
 
 public class UserMealsUtil {
@@ -40,13 +41,14 @@ public class UserMealsUtil {
         }
 
         // yield filtered list
-        for (UserMeal userMeal : mealList) {
-            if (userMeal.isInRange(startTime, endTime)) {
-                boolean exceed = calories.get(userMeal.getDate()) > caloriesPerDay;
-                result.add(new UserMealWithExceed(userMeal, exceed));
-            }
-        }
 
+        mealList.stream()
+                .filter(m -> m.isInRange(startTime, endTime))
+                .forEach(m -> result.add(new UserMealWithExceed
+                                            (m, calories.get(m.getDate()) > caloriesPerDay)));
+        for (UserMealWithExceed m : result) {
+            System.out.println(m.toString());
+        }
         return result;
     }
 }

@@ -42,4 +42,10 @@ public class UserMealWithExceed {
     public boolean getExceed() {
         return this.exceed;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s в %s на %d калорий",
+                this.getDate(), this.description, this.getTime(), this.calories);
+    }
 }
