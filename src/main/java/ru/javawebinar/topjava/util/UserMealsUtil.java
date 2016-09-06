@@ -34,7 +34,7 @@ public class UserMealsUtil {
                                                                     LocalTime startTime, LocalTime endTime,
                                                                     int caloriesPerDay) {
 
-        final Map<LocalDate, Integer> dayToCalories = mealList.stream()
+        Map<LocalDate, Integer> dayToCalories = mealList.stream()
                 .collect(Collectors.toMap(
                       m -> m.getDate(),
                       m -> m.getCalories(),
