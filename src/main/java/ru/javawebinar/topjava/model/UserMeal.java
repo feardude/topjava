@@ -31,12 +31,4 @@ public class UserMeal {
     public LocalDate getDate() {
         return this.dateTime.toLocalDate();
     }
-
-    public boolean isInRange (LocalTime start, LocalTime end) {
-        LocalTime time = this.getTime();
-        if ((time.isBefore(end) && time.isAfter(start))         // is inside range
-                || time.equals(start) || time.equals(end))      // check boundaries
-            return true;
-        return false;
-    }
 }
