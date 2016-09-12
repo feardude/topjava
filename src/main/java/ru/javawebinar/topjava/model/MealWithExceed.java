@@ -28,7 +28,7 @@ public class MealWithExceed {
 
     @Override
     public String toString() {
-        return "UserMealWithExceed{" +
+        return "MealWithExceed{" +
                 "dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
