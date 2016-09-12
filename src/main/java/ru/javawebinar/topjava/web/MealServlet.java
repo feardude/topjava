@@ -22,14 +22,19 @@ public class MealServlet extends HttpServlet {
 
     public MealServlet() {
         dao = new MealDAO();
-        LOG.debug("Servlet and DAO initialized");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        LOG.debug("forward to mealList.jsp");
+        String forward = "";
+        String action = req.getParameter("action");
 
-        req.setAttribute("meals", MealsUtil.getMealWithExceeded(dao.retrieveAll(), this.caloriesPerDay));
-        req.getRequestDispatcher("/mealList.jsp").forward(req, resp);
+        if (action.equalsIgnoreCase("listMeal")) {
+            req.setAttribute("meals", MealsUtil.getMealWithExceeded(dao.retrieveAll(), this.caloriesPerDay));
+            forward = "/listMeal.jsp";
+            LOG.info("Action = listMeal; forward to /listMeal.jsp");
+        }
+
+        req.getRequestDispatcher(forward).forward(req, resp);
     }
 }
