@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,7 @@ public class MealDAO {
     private static final Logger LOG = getLogger(MealDAO.class);
 
     public MealDAO() {
-        meals = new HashMap<>();
+        meals = new ConcurrentHashMap<>();
         meals.put(1, new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 450, 1));
         meals.put(2, new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 950, 2));
         meals.put(3, new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 600, 3));
