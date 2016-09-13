@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
-
+// TODO interface and implementaion
 public class MealDAO {
 
     private Map<Integer, Meal> meals;
@@ -22,20 +22,21 @@ public class MealDAO {
 
     public MealDAO() {
         meals = new HashMap<>();
-        meals.put(1, new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 450));
-        meals.put(2, new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 950));
-        meals.put(3, new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 600));
-        meals.put(4, new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 550));
-        meals.put(5, new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 800));
-        meals.put(6, new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 700));
+        meals.put(1, new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 450, 1));
+        meals.put(2, new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 950, 2));
+        meals.put(3, new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 600, 3));
+        meals.put(4, new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 550, 4));
+        meals.put(5, new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 800, 5));
+        meals.put(6, new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 700, 6));
 
         counter = new AtomicInteger(meals.size());
     }
 
     public void add(Meal m) {
-        meals.put(counter.incrementAndGet(), m);
+        Meal meal = new Meal(m.getDateTime(), m.getDescription(), m.getCalories(), counter.incrementAndGet());
+        meals.put(meal.getId(), meal);
 
-        LOG.info("Added new " + m.toString());
+        LOG.info("Added new " + meal.toString());
         LOG.debug("atomic counter = " + counter.get());
     }
 
@@ -45,15 +46,18 @@ public class MealDAO {
     }
 
     public Meal retrieveByID(int id) {
-        return null;
+        LOG.info("Retrieving " + meals.get(id));
+        return meals.get(id);
     }
 
     public void update(Meal m) {
-
+        meals.put(m.getId(), m);
+        LOG.info("Updated " + m.toString());
     }
 
-    public void delete() {
-
+    public void delete(int id) {
+        Meal meal = meals.remove(id);
+        LOG.info("Deleted " + meal.toString());
     }
 
 }
