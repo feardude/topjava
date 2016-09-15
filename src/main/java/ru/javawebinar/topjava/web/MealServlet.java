@@ -31,7 +31,7 @@ public class MealServlet extends HttpServlet {
     }
 
     private List<MealWithExceed> retrieveAllWithExceeded() {
-        return MealsUtil.getMealWithExceeded(dao.retrieveAll(), this.caloriesPerDay);
+        return MealsUtil.getMealWithExceeded(dao.getAll(), this.caloriesPerDay);
     }
 
     @Override
@@ -39,28 +39,27 @@ public class MealServlet extends HttpServlet {
         String forward = "";
         String action = req.getParameter("action");
 
-        if (action.equalsIgnoreCase("listMeal")) {
-            LOG.debug("action=listMeal; forward to listMeal.jsp");
-            req.setAttribute("meals", retrieveAllWithExceeded());
-            forward = LIST_MEAL;
-        }
-        else if (action.equalsIgnoreCase("delete")) {
-            LOG.debug("action=delete; forward to listMeal.jsp");
-            forward = LIST_MEAL;
-            int id = Integer.parseInt(req.getParameter("id"));
-            dao.delete(id);
-            req.setAttribute("meals", retrieveAllWithExceeded());
-        }
-        else if (action.equalsIgnoreCase("update")) {
-            LOG.debug("action=update; forward to meal.jsp");
-            forward = ADD_OR_UPDATE;
-            int id = Integer.parseInt(req.getParameter("id"));
-            Meal meal = dao.retrieveByID(id);
-            req.setAttribute("meal", meal);
-        }
-        else if (action.equalsIgnoreCase("add")) {
-            LOG.debug("action=add; forward to meal.jsp");
-            forward = ADD_OR_UPDATE;
+        switch (action) {
+            case "listMeal":LOG.debug("action=listMeal; forward to listMeal.jsp");
+                            req.setAttribute("meals", retrieveAllWithExceeded());
+                            forward = LIST_MEAL;
+                            break;
+
+            case "delete":  LOG.debug("action=delete; forward to listMeal.jsp");
+                            forward = LIST_MEAL;
+                            int id = Integer.parseInt(req.getParameter("id"));
+                            dao.delete(id);
+                            req.setAttribute("meals", retrieveAllWithExceeded());
+                            break;
+
+            case "update":  LOG.debug("action=update; forward to meal.jsp");
+                            forward = ADD_OR_UPDATE;
+                            id = Integer.parseInt(req.getParameter("id"));
+                            Meal meal = dao.get(id);
+                            req.setAttribute("meal", meal);
+
+            case "add":     LOG.debug("action=add; forward to meal.jsp");
+                            forward = ADD_OR_UPDATE;
         }
 
         req.getRequestDispatcher(forward).forward(req, resp);

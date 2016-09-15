@@ -4,16 +4,12 @@ import org.slf4j.Logger;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
-// TODO interface and implementaion
 public class MealDAO {
 
     private Map<Integer, Meal> meals;
@@ -41,12 +37,11 @@ public class MealDAO {
         LOG.debug("atomic counter = " + counter.get());
     }
 
-    public List<Meal> retrieveAll() {
-        return meals.values().stream()
-                .collect(Collectors.toList());
+    public List<Meal> getAll() {
+        return new ArrayList<>(meals.values());
     }
 
-    public Meal retrieveByID(int id) {
+    public Meal get(int id) {
         LOG.info("Retrieving " + meals.get(id));
         return meals.get(id);
     }

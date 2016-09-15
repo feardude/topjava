@@ -44,16 +44,7 @@ public class MealsUtil {
     }
 
     public static List<MealWithExceed> getMealWithExceeded(List<Meal> meals, int caloriesPerDay) {
-        Map<LocalDate, Integer> dayToCalories = meals.stream()
-                .collect(Collectors.toMap(
-                        Meal::getDate,
-                        Meal::getCalories,
-                        Integer::sum)
-                );
-
-        return meals.stream()
-                .map(m -> new MealWithExceed(m, dayToCalories.get(m.getDate()) > caloriesPerDay))
-                .collect(Collectors.toList());
+        return getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, caloriesPerDay);
     }
 
     public static List<MealWithExceed> getFilteredWithExceededByCycle(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
