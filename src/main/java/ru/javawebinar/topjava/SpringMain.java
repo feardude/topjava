@@ -5,6 +5,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.web.user.AdminRestController;
+import ru.javawebinar.topjava.web.user.ProfileRestController;
 
 import java.util.Arrays;
 
@@ -15,9 +16,12 @@ import java.util.Arrays;
 public class SpringMain {
     public static void main(String[] args) {
         // java 7 Automatic resource management
-        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
-            System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
-            AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
+        try (ConfigurableApplicationContext appContext = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
+            System.out.println("\n/----- Beans -----/");
+            Arrays.asList(appContext.getBeanDefinitionNames()).forEach(System.out::println);
+            System.out.println("/----- Beans -----/\n");
+
+            AdminRestController adminUserController = appContext.getBean(AdminRestController.class);
             adminUserController.create(new User(1, "userName", "email", "password", Role.ROLE_ADMIN));
         }
     }
