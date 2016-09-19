@@ -41,6 +41,12 @@ public class Meal extends BaseEntity {
     public LocalTime getTime() {
         return dateTime.toLocalTime();
     }
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    public Integer getId() {
+        return id;
+    }
 
     @Override
     public String toString() {

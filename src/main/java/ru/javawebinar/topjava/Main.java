@@ -1,5 +1,8 @@
 package ru.javawebinar.topjava;
 
+import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.repository.mock.InMemoryMealRepositoryImpl;
+
 /**
  * User: gkislin
  * Date: 05.08.2015
@@ -10,5 +13,8 @@ package ru.javawebinar.topjava;
 public class Main {
     public static void main(String[] args) {
         System.out.println("Hello Topjava Enterprise!");
+
+        MealRepository mealRepo = new InMemoryMealRepositoryImpl();
+        mealRepo.getAll().forEach(System.out::println);
     }
 }
