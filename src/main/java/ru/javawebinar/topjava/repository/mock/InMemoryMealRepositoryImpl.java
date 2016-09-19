@@ -5,9 +5,11 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * GKislin
@@ -41,7 +43,9 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Collection<Meal> getAll() {
-        return repository.values();
+        return repository.values().stream()
+                .sorted((m1, m2) -> m2.getDateTime().compareTo(m1.getDateTime()))
+                .collect(Collectors.toList());
     }
 }
 
