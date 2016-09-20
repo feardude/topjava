@@ -15,6 +15,6 @@ public class Main {
         System.out.println("Hello Topjava Enterprise!");
 
         MealRepository mealRepo = new InMemoryMealRepositoryImpl();
-        mealRepo.getAll().forEach(System.out::println);
+        mealRepo.getAll(1).forEach(System.out::println);
     }
 }

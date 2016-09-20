@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.exception.ExceptionUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.List;
@@ -15,27 +16,28 @@ public class MealServiceImpl implements MealService {
     private MealRepository repository;
 
     @Override
-    public Meal save(Meal meal) {
-        return null;
+    public Meal save(int userId, Meal meal) {
+        return repository.save(userId, meal);
     }
 
     @Override
-    public void delete(int id) throws NotFoundException {
+    public void update(int userId, Meal meal) {
+        repository.save(userId, meal);
+    }
+
+    @Override
+    public void delete(int userId, int id) throws NotFoundException {
+        ExceptionUtil.checkNotFoundWithId(repository.delete(userId, id), id);
+    }
+
+    @Override
+    public Meal get(int userId, int id) throws NotFoundException {
+        return ExceptionUtil.checkNotFound(repository.get(userId, id), "userId=" + userId + " id=" + id);
 
     }
 
     @Override
-    public Meal get(int id) throws NotFoundException {
-        return null;
-    }
-
-    @Override
-    public List<Meal> getAll() {
-        return repository.getAll();
-    }
-
-    @Override
-    public void update(int id, Meal meal) {
-
+    public List<Meal> getAll(int userId) {
+        return repository.getAll(userId);
     }
 }

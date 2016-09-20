@@ -22,28 +22,26 @@ public class MealRestController {
 
     public List<MealWithExceed> getAll() {
         LOG.info("getAll");
-        return MealsUtil.getWithExceeded(service.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY);
+        return MealsUtil.getWithExceeded(service.getAll(AuthorizedUser.id()), MealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
     public Meal get(int id) {
         LOG.info("get id=" + id);
-        return service.get(id);
+        return service.get(AuthorizedUser.id(), id);
     }
 
     public Meal save(Meal meal) {
-        meal.setId(AuthorizedUser.id());
-        service.save(meal);
-        return meal;
+        return service.save(AuthorizedUser.id(), meal);
     }
 
     public void delete(int id) {
         LOG.info("delete id=" + id);
-        service.delete(id);
+        service.delete(AuthorizedUser.id(), id);
     }
 
-    public void update(int id, Meal meal) {
+    public void update(Meal meal) {
         LOG.info("update " + meal);
-        service.update(id, meal);
+        service.update(AuthorizedUser.id(), meal);
     }
 
 }
