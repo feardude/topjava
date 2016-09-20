@@ -1,8 +1,20 @@
 package ru.javawebinar.topjava.service;
 
-/**
- * GKislin
- * 15.06.2015.
- */
+import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
+
+import java.util.List;
+
 public interface MealService {
+
+    Meal save(Meal meal);
+
+    void delete(int id) throws NotFoundException;
+
+    Meal get(int id) throws NotFoundException;
+
+    List<Meal> getAll();
+
+    void update(int id, Meal meal);
+
 }

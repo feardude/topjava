@@ -4,6 +4,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 import ru.javawebinar.topjava.web.user.ProfileRestController;
 
@@ -17,12 +18,14 @@ public class SpringMain {
     public static void main(String[] args) {
         // java 7 Automatic resource management
         try (ConfigurableApplicationContext appContext = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
-            System.out.println("\n/----- Beans -----/");
-            Arrays.asList(appContext.getBeanDefinitionNames()).forEach(System.out::println);
-            System.out.println("/----- Beans -----/\n");
+//            System.out.println("\n/----- Beans -----/");
+//            Arrays.asList(appContext.getBeanDefinitionNames()).forEach(System.out::println);
+//            System.out.println("/----- Beans -----/\n");
 
-            AdminRestController adminUserController = appContext.getBean(AdminRestController.class);
-            adminUserController.create(new User(1, "userName", "email", "password", Role.ROLE_ADMIN));
+//            AdminRestController adminUserController = appContext.getBean(AdminRestController.class);
+//            adminUserController.save(new User(1, "userName", "email", "password", Role.ROLE_ADMIN));
+//            adminUserController.getAll().forEach(System.out::println);
+            appContext.getBean(MealRestController.class).getAll().forEach(System.out::println);
         }
     }
 }

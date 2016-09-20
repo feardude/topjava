@@ -28,8 +28,9 @@ public abstract class AbstractUserController {
     }
 
     public User create(User user) {
-        user.setId(null);
-        LOG.info("create " + user);
+        // TODO разобраться почему стоит setId(null)
+//        user.setId(null);
+        LOG.info("save " + user);
         return service.save(user);
     }
 
