@@ -23,15 +23,15 @@ import java.util.stream.Collectors;
 public class InMemoryUserRepositoryImpl implements UserRepository {
     private static final Logger LOG = LoggerFactory.getLogger(InMemoryUserRepositoryImpl.class);
     private static final AtomicInteger counter = new AtomicInteger();
-//    public static List<User> USERS = new ArrayList<>(Arrays.asList(
-//            new User(counter.incrementAndGet(), "admin", "admin@topjava.ru", "admin", Role.ROLE_ADMIN),
-//            new User(counter.incrementAndGet(), "user1", "user1@topjava.ru", "user1", Role.ROLE_USER),
-//            new User(counter.incrementAndGet(), "vasya", "vasya@topjava.ru", "vasya", Role.ROLE_USER),
-//            new User(counter.incrementAndGet(), "kimbabig", "kimbabig@topjava.ru", "kimbabig", Role.ROLE_USER),
-//            new User(counter.incrementAndGet(), "boris", "boris@topjava.ru", "boris", Role.ROLE_USER),
-//            new User(counter.incrementAndGet(), "user3", "user3@topjava.ru", "user3", Role.ROLE_USER)
-//    ));
     private static Map<Integer, User> USERS = new ConcurrentHashMap<>();
+    {
+        USERS.put(counter.incrementAndGet(), new User(counter.get(), "admin", "admin@topjava.ru", "admin", Role.ROLE_ADMIN));
+        USERS.put(counter.incrementAndGet(), new User(counter.get(), "user1", "user1@topjava.ru", "user1", Role.ROLE_USER));
+        USERS.put(counter.incrementAndGet(), new User(counter.get(), "vasya", "vasya@topjava.ru", "vasya", Role.ROLE_USER));
+        USERS.put(counter.incrementAndGet(), new User(counter.get(), "kimbabig", "kimbabig@topjava.ru", "kimbabig", Role.ROLE_USER));
+        USERS.put(counter.incrementAndGet(), new User(counter.get(), "boris", "boris@topjava.ru", "boris", Role.ROLE_USER));
+        USERS.put(counter.incrementAndGet(), new User(counter.get(), "user3", "user3@topjava.ru", "user3", Role.ROLE_USER));
+    }
 
     @Override
     public boolean delete(int id) {
