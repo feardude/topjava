@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.to.MealWithExceed;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.ServletConfig;
@@ -18,7 +16,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Map;
 import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
@@ -69,6 +66,7 @@ public class MealServlet extends HttpServlet {
                 endTime = LocalTime.MAX;
             else endTime = LocalTime.parse(request.getParameter("endTime"));
 
+            // TODO propagate time&date params: response -> request
             request.setAttribute("mealList", controller.getAll(startDate, endDate, startTime, endTime));
             request.getRequestDispatcher("/mealList.jsp").forward(request, response);
         }
