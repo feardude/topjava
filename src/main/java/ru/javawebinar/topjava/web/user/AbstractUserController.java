@@ -8,11 +8,8 @@ import ru.javawebinar.topjava.service.UserService;
 
 import java.util.List;
 
-/**
- * User: gkislin
- */
 public abstract class AbstractUserController {
-    protected final Logger LOG = LoggerFactory.getLogger(getClass());
+    private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private UserService service;
@@ -28,8 +25,6 @@ public abstract class AbstractUserController {
     }
 
     public User create(User user) {
-        // TODO разобраться почему стоит setId(null)
-//        user.setId(null);
         LOG.info("save " + user);
         return service.save(user);
     }

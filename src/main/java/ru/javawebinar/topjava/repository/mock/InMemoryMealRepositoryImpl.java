@@ -23,8 +23,6 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal save(int userId, Meal meal) {
-        // TODO BUG: update creates new meal id
-        // BaseEntity isNew() checks BaseEntity field instead of this.Meal
         if (meal.isNew())
             meal.setId(counter.incrementAndGet());
         meal.setUserId(userId);

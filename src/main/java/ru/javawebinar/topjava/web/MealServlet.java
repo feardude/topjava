@@ -71,8 +71,8 @@ public class MealServlet extends HttpServlet {
             controller.delete(id);
             response.sendRedirect("meals");
 
-        } else if ("save".equals(action) || "update".equals(action)) {
-            final Meal meal = action.equals("save") ?
+        } else if ("create".equals(action) || "update".equals(action)) {
+            final Meal meal = action.equals("create") ?
                     new Meal(LocalDateTime.now().withNano(0).withSecond(0), "", 1000) :
                     controller.get(getId(request));
             request.setAttribute("meal", meal);

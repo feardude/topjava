@@ -6,10 +6,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-/**
- * GKislin
- * 11.01.2015.
- */
 public class Meal extends BaseEntity {
 
     private Integer id;
@@ -19,7 +15,7 @@ public class Meal extends BaseEntity {
     private final int calories;
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
-        this(AuthorizedUser.id(), dateTime, description, calories);
+        this(null, dateTime, description, calories);
     }
 
     public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {
@@ -58,9 +54,15 @@ public class Meal extends BaseEntity {
     }
 
     @Override
+    public boolean isNew() {
+        return this.id == null;
+    }
+
+    @Override
     public String toString() {
         return "Meal{" +
                 "id=" + id +
+                "userId=" + userId +
                 ", dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
