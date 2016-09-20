@@ -1,7 +1,12 @@
 package ru.javawebinar.topjava;
 
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.repository.mock.InMemoryMealRepositoryImpl;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * User: gkislin
@@ -14,7 +19,14 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello Topjava Enterprise!");
 
-        MealRepository mealRepo = new InMemoryMealRepositoryImpl();
-        mealRepo.getAll(1).forEach(System.out::println);
+//        2015-05-31T20:00
+//        LocalDate startDate = LocalDate.parse(request.getParameter("startDate"));
+//        LocalDate endDate = LocalDate.parse(null);
+//        LocalTime startTime = LocalTime.parse(request.getParameter("startTime"));
+//        LocalTime endTime = LocalTime.parse(request.getParameter("endTime"));
+
+//        LocalDateTime start = startDate.atTime(startTime);
+//        LocalDateTime end = endDate.atTime(endTime);
+
     }
 }

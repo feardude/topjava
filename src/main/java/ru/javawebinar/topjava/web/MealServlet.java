@@ -6,6 +6,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.to.MealWithExceed;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.ServletConfig;
@@ -14,13 +15,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Map;
 import java.util.Objects;
 
-/**
- * User: gkislin
- * Date: 19.08.2014
- */
 public class MealServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(MealServlet.class);
     private MealRestController controller;
@@ -41,27 +41,59 @@ public class MealServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String id = request.getParameter("id");
+        String action = request.getParameter("action");
 
-        Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
-                LocalDateTime.parse(request.getParameter("dateTime")),
-                request.getParameter("description"),
-                Integer.valueOf(request.getParameter("calories")));
+        if (action == null) {
+            LOG.warn("Parameter action == null");
+        }
+        else if (action.equals("filter")) {
+            LOG.info("Filtering meal list");
 
-        LOG.info(meal.isNew() ? "Create {}" : "Update {}", meal);
+//            Map<String, String[]> params = request.getParameterMap();
+            LocalDate startDate, endDate;
+            LocalTime startTime, endTime;
 
-        if (meal.isNew())
-            controller.save(meal);
-        else
-            controller.update(meal);
-        response.sendRedirect("meals");
+            if (request.getParameter("startDate").isEmpty())
+                startDate = LocalDate.MIN;
+            else startDate = LocalDate.parse(request.getParameter("startDate"));
+
+            if (request.getParameter("endDate").isEmpty())
+                endDate = LocalDate.MAX;
+            else endDate = LocalDate.parse(request.getParameter("endDate"));
+
+            if (request.getParameter("startTime").isEmpty())
+                startTime = LocalTime.MIN;
+            else startTime = LocalTime.parse(request.getParameter("startTime"));
+
+            if (request.getParameter("endTime").isEmpty())
+                endTime = LocalTime.MAX;
+            else endTime = LocalTime.parse(request.getParameter("endTime"));
+
+            request.setAttribute("mealList", controller.getAll(startDate, endDate, startTime, endTime));
+            request.getRequestDispatcher("/mealList.jsp").forward(request, response);
+        }
+        else if (action.equals("create")) {
+            LOG.info("Creating new meal");
+            Meal meal = new Meal(null,
+                    LocalDateTime.parse(request.getParameter("dateTime")),
+                    request.getParameter("description"),
+                    Integer.valueOf(request.getParameter("calories")));
+
+            LOG.info(meal.isNew() ? "Create {}" : "Update {}", meal);
+
+            if (meal.isNew())
+                controller.save(meal);
+            else
+                controller.update(meal);
+
+            response.sendRedirect("meals");
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
         if (action == null) {
-            LOG.info("getAll");
             request.setAttribute("mealList", controller.getAll());
             request.getRequestDispatcher("/mealList.jsp").forward(request, response);
 
