@@ -26,15 +26,15 @@
         <input type="hidden" name="action" value="filter">
         <div>
             <label for="startDate">From Date:</label>
-            <input type="date" name="startDate" id="startDate">
+            <input type="date" name="startDate" id="startDate" value="${startDate}">
             <label for="endDate">To Date:</label>
-            <input type="date" name="endDate" id="endDate">
+            <input type="date" name="endDate" id="endDate" value="${endDate}">
         </div>
         <div>
             <label for="startTime">From Time:</label>
-            <input type="time" name="startTime" id="startTime">
+            <input type="time" name="startTime" id="startTime" value="${startTime}">
             <label for="endTime">To Time:</label>
-            <input type="time" name="endTime" id="endTime">
+            <input type="time" name="endTime" id="endTime" value="${endTime}">
         </div>
         <div>
             <button type="submit">Отфильтровать</button>
