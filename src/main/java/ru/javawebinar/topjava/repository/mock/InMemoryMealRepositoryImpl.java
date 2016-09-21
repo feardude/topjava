@@ -28,22 +28,19 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
             meal.setId(counter.incrementAndGet());
             meal.setUserId(userId);
         }
-        if (userId == meal.getUserId()) {
-            repository.put(meal.getId(), meal);
-            return meal;
-        }
-        return null;
+        return meal.getUserId() == userId ? repository.put(meal.getId(), meal) : null;
     }
 
     @Override
     public boolean delete(int userId, int id) {
-        return userId == repository.get(id).getUserId() && repository.remove(id) != null;
+        Meal meal = repository.get(id);
+        return meal != null && meal.getUserId() == userId && repository.remove(id) != null;
     }
 
     @Override
     public Meal get(int userId, int id) {
         Meal meal = repository.get(id);
-        return userId == meal.getUserId() ? meal : null;
+        return meal.getUserId() == userId ? meal : null;
     }
 
     @Override
