@@ -46,27 +46,18 @@ public class MealServlet extends HttpServlet {
         else if (action.equals("filter")) {
             LOG.info("Filtering meal list");
 
-            LocalDate startDate, endDate;
-            LocalTime startTime, endTime;
+            String startDate = request.getParameter("startDate");
+            String endDate = request.getParameter("endDate");
+            String startTime = request.getParameter("startTime");
+            String endTime = request.getParameter("endTime");
 
             // Propagate params to remain them on UI after refresh
-            request.setAttribute("startDate", request.getParameter("startDate"));
-            request.setAttribute("endDate", request.getParameter("endDate"));
-            request.setAttribute("startTime", request.getParameter("startTime"));
-            request.setAttribute("endTime", request.getParameter("endTime"));
+            request.setAttribute("startDate", startDate);
+            request.setAttribute("endDate", endDate);
+            request.setAttribute("startTime", startTime);
+            request.setAttribute("endTime", endTime);
 
-            startDate = request.getParameter("startDate").isEmpty() ?
-                    LocalDate.MIN : LocalDate.parse(request.getParameter("startDate"));
-
-            endDate = request.getParameter("endDate").isEmpty() ?
-                    LocalDate.MAX : LocalDate.parse(request.getParameter("endDate"));
-
-            startTime = request.getParameter("startTime").isEmpty() ?
-                    LocalTime.MIN : LocalTime.parse(request.getParameter("startTime"));
-
-            endTime = request.getParameter("endTime").isEmpty() ?
-                    LocalTime.MAX : LocalTime.parse(request.getParameter("endTime"));
-
+            // Refresh page
             request.setAttribute("mealList", controller.getAll(startDate, endDate, startTime, endTime));
             request.getRequestDispatcher("/mealList.jsp").forward(request, response);
         }
