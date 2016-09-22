@@ -28,7 +28,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
             meal.setId(counter.incrementAndGet());
             meal.setUserId(userId);
         }
-        return meal.getUserId() == userId ? repository.put(meal.getId(), meal) : null;
+        return repository.get(meal.getId()).getUserId() == userId ? repository.put(meal.getId(), meal) : null;
     }
 
     @Override
