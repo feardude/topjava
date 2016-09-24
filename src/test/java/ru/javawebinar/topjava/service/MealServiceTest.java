@@ -71,21 +71,26 @@ public class MealServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void testDeleteNotFound() {
-        service.delete(1, 1);
+        service.delete(1, USER1_ID);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testDeleteWrongUser() {
+        service.delete(mealId, USER2_ID);
     }
 
     @Test
-    public void getBetweenDates() throws Exception {
+    public void getBetweenDates() {
 
     }
 
     @Test
-    public void getBetweenDateTimes() throws Exception {
+    public void getBetweenDateTimes() {
 
     }
 
     @Test
-    public void testGetAll() throws Exception {
+    public void testGetAll() {
         List<Meal> user1Meals = USERS_TO_MEALS.get(USER1_ID).values().stream()
                 .sorted((m1, m2) -> m2.getDateTime().compareTo(m1.getDateTime()))
                 .collect(Collectors.toList());
@@ -94,12 +99,12 @@ public class MealServiceTest {
     }
 
     @Test
-    public void testGetAllNotFound() {
+    public void testGetAllWrongUser() {
         Assert.assertTrue(service.getAll(1).isEmpty());
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    public void testUpdate() {
         Meal updated = new Meal(mealId, LocalDateTime.of(2016, Month.SEPTEMBER, 24, 10, 20), "Каша", 400);
         updated.setDescription("Updated description");
         service.update(updated, USER1_ID);
@@ -114,8 +119,10 @@ public class MealServiceTest {
     }
 
     @Test
-    public void save() throws Exception {
-
+    public void testSave() {
+        service.save(new Meal(LocalDateTime.of(2016, Month.SEPTEMBER, 24, 10, 20), "Новая еда", 1000), USER1_ID);
+        int expected = USERS_TO_MEALS.get(USER1_ID).size() + 1;
+        Assert.assertEquals(expected, service.getAll(USER1_ID).size());
     }
 
 }
