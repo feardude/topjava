@@ -16,7 +16,7 @@ import ru.javawebinar.topjava.web.user.AdminRestController;
 import java.util.Collection;
 
 import static ru.javawebinar.topjava.UserTestData.ADMIN;
-import static ru.javawebinar.topjava.UserTestData.USER;
+import static ru.javawebinar.topjava.UserTestData.USER1;
 
 /**
  * GKislin
@@ -35,13 +35,13 @@ public class InMemoryAdminRestControllerSpringTest {
     @Before
     public void setUp() throws Exception {
         repository.getAll().forEach(u -> repository.delete(u.getId()));
-        repository.save(USER);
+        repository.save(USER1);
         repository.save(ADMIN);
     }
 
     @Test
     public void testDelete() throws Exception {
-        controller.delete(UserTestData.USER_ID);
+        controller.delete(UserTestData.USER1_ID);
         Collection<User> users = controller.getAll();
         Assert.assertEquals(users.size(), 1);
         Assert.assertEquals(users.iterator().next(), ADMIN);

@@ -41,18 +41,18 @@ public class UserServiceTest {
         User newUser = new User(null, "New", "new@gmail.com", "newPass", 1555, false, Collections.singleton(Role.ROLE_USER));
         User created = service.save(newUser);
         newUser.setId(created.getId());
-        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, newUser, USER), service.getAll());
+        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, newUser, USER1, USER2), service.getAll());
     }
 
     @Test(expected = DataAccessException.class)
     public void testDuplicateMailSave() throws Exception {
-        service.save(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER));
+        service.save(new User(null, "Duplicate", "user1@yandex.ru", "newPass", Role.ROLE_USER));
     }
 
     @Test
     public void testDelete() throws Exception {
-        service.delete(USER_ID);
-        MATCHER.assertCollectionEquals(Collections.singletonList(ADMIN), service.getAll());
+        service.delete(ADMIN_ID);
+        MATCHER.assertCollectionEquals(Arrays.asList(USER1, USER2), service.getAll());
     }
 
     @Test(expected = NotFoundException.class)
@@ -62,8 +62,8 @@ public class UserServiceTest {
 
     @Test
     public void testGet() throws Exception {
-        User user = service.get(USER_ID);
-        MATCHER.assertEquals(USER, user);
+        User user = service.get(USER1_ID);
+        MATCHER.assertEquals(USER1, user);
     }
 
     @Test(expected = NotFoundException.class)
@@ -73,22 +73,22 @@ public class UserServiceTest {
 
     @Test
     public void testGetByEmail() throws Exception {
-        User user = service.getByEmail("user@yandex.ru");
-        MATCHER.assertEquals(USER, user);
+        User user = service.getByEmail("user1@yandex.ru");
+        MATCHER.assertEquals(USER1, user);
     }
 
     @Test
     public void testGetAll() throws Exception {
         Collection<User> all = service.getAll();
-        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, USER), all);
+        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, USER1, USER2), all);
     }
 
     @Test
     public void testUpdate() throws Exception {
-        User updated = new User(USER);
+        User updated = new User(USER1);
         updated.setName("UpdatedName");
         updated.setCaloriesPerDay(330);
         service.update(updated);
-        MATCHER.assertEquals(updated, service.get(USER_ID));
+        MATCHER.assertEquals(updated, service.get(USER1_ID));
     }
 }
