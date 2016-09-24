@@ -21,6 +21,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.MealTestData.MATCHER;
 import static ru.javawebinar.topjava.UserTestData.USER1_ID;
+import static ru.javawebinar.topjava.UserTestData.USER2_ID;
 import static ru.javawebinar.topjava.model.BaseEntity.START_SEQ;
 
 
@@ -98,12 +99,18 @@ public class MealServiceTest {
     }
 
     @Test
-    public void update() throws Exception {
+    public void testUpdate() throws Exception {
         Meal updated = new Meal(mealId, LocalDateTime.of(2016, Month.SEPTEMBER, 24, 10, 20), "Каша", 400);
         updated.setDescription("Updated description");
-        updated.setCalories(777);
         service.update(updated, USER1_ID);
         MATCHER.assertEquals(updated, service.get(mealId, USER1_ID));
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testUpdateWrongUser() {
+        Meal updated = new Meal(mealId, LocalDateTime.of(2016, Month.SEPTEMBER, 24, 10, 20), "Каша", 400);
+        updated.setDescription("Updated description");
+        service.update(updated, USER2_ID);
     }
 
     @Test
