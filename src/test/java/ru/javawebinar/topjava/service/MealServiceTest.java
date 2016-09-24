@@ -3,15 +3,21 @@ package ru.javawebinar.topjava.service;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.DbPopulator;
 
-import static org.junit.Assert.assertEquals;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.MealTestData.*;
+import static ru.javawebinar.topjava.MealTestData.MATCHER;
+import static ru.javawebinar.topjava.UserTestData.USER1_ID;
+
 
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
@@ -20,6 +26,8 @@ import static ru.javawebinar.topjava.MealTestData.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 
 public class MealServiceTest {
+
+    private static final Logger LOG = getLogger(MealServiceTest.class);
 
     @Autowired
     protected MealService service;
@@ -34,8 +42,8 @@ public class MealServiceTest {
 
     @Test
     public void testGet() throws Exception {
-        Meal expected = new Meal();
-        MATCHER.assertEquals(expected, service.get(1, UserTestData.USER1_ID));
+//        Meal expected = USERS_TO_MEALS.get(1);
+//        MATCHER.assertEquals(expected, service.get(1, USER1_ID));
     }
 
     @Test
@@ -54,8 +62,12 @@ public class MealServiceTest {
     }
 
     @Test
-    public void getAll() throws Exception {
+    public void testGetAll() throws Exception {
+        List<Meal> user1Meals = USERS_TO_MEALS.get(USER1_ID).values().stream()
+                .sorted((m1, m2) -> m2.getDateTime().compareTo(m1.getDateTime()))
+                .collect(Collectors.toList());
 
+        MATCHER.assertCollectionEquals(user1Meals, service.getAll(USER1_ID));
     }
 
     @Test
