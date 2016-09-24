@@ -32,7 +32,9 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        return null;
+        List<Meal> result =  jdbcTemplate.query(
+                "select * from meals where id=? and userid=?", ROW_MAPPER, id, userId);
+        return result.isEmpty() ? null : result.get(0);
     }
 
     @Override
@@ -45,7 +47,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
         return jdbcTemplate.query(
                 "select * from meals " +
-                "where datetime <@ tsrange(?, ?)" +     
+                "where datetime <@ tsrange(?, ?)" +
                 "and userid=?" +
                 "order by datetime desc",
                 ROW_MAPPER, startDate, endDate, userId);
