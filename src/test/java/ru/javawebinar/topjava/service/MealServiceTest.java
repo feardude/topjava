@@ -57,7 +57,14 @@ public class MealServiceTest {
 
     @Test
     public void testDelete() throws Exception {
+        int mealId = START_SEQ + 3;
+        service.delete(mealId, USER1_ID);
 
+        List<Meal> user1Meals = USERS_TO_MEALS.get(USER1_ID).values().stream()
+                .filter(m -> m.getId() != mealId)
+                .sorted((m1, m2) -> m2.getDateTime().compareTo(m1.getDateTime()))
+                .collect(Collectors.toList());
+        MATCHER.assertCollectionEquals(user1Meals, service.getAll(USER1_ID));
     }
 
     @Test(expected = NotFoundException.class)
