@@ -3,10 +3,14 @@ package ru.javawebinar.topjava.repository.jdbc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
+import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,10 +23,38 @@ public class JdbcMealRepositoryImpl implements MealRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private NamedParameterJdbcTemplate namedJdbcTemplate;
+
+    private SimpleJdbcInsert insertMeal;
+
+    @Autowired
+    public JdbcMealRepositoryImpl(DataSource dataSource) {
+        this.insertMeal = new SimpleJdbcInsert(dataSource)
+                .withTableName("meals")
+                .usingGeneratedKeyColumns("id");
+    }
+
 
     @Override
-    public Meal save(Meal Meal, int userId) {
-        return null;
+    public Meal save(Meal meal, int userId) {
+        MapSqlParameterSource map = new MapSqlParameterSource()
+                .addValue("id", meal.getId())
+                .addValue("datetime", meal.getDateTime())
+                .addValue("description", meal.getDescription())
+                .addValue("calories", meal.getCalories())
+                .addValue("userid", userId);
+
+        if (meal.isNew()) {
+            Number id = insertMeal.executeAndReturnKey(map);
+            meal.setId(id.intValue());
+        } else {
+            // TODO check userId
+            namedJdbcTemplate.update(
+                    "update meals set id=:id, datetime=:datetime, description=:description, " +
+                    "calories=:calories where userid=:userid", map);
+        }
+        return meal;
     }
 
     @Override
@@ -32,9 +64,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        List<Meal> result =  jdbcTemplate.query(
-                "select * from meals where id=? and userid=?", ROW_MAPPER, id, userId);
-        return result.isEmpty() ? null : result.get(0);
+        return jdbcTemplate.queryForObject("select * from meals where id=? and userid=?", ROW_MAPPER, id, userId);
     }
 
     @Override
