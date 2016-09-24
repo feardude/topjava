@@ -12,6 +12,8 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.DbPopulator;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,7 @@ import static ru.javawebinar.topjava.model.BaseEntity.START_SEQ;
 public class MealServiceTest {
 
     private static final Logger LOG = getLogger(MealServiceTest.class);
+    private static int mealId = START_SEQ + 3;
 
     @Autowired
     protected MealService service;
@@ -45,7 +48,6 @@ public class MealServiceTest {
 
     @Test
     public void testGet() throws Exception {
-        int mealId = START_SEQ + 3;
         Meal expected = USERS_TO_MEALS.get(USER1_ID).get(mealId);
         MATCHER.assertEquals(expected, service.get(mealId, USER1_ID));
     }
@@ -57,7 +59,6 @@ public class MealServiceTest {
 
     @Test
     public void testDelete() throws Exception {
-        int mealId = START_SEQ + 3;
         service.delete(mealId, USER1_ID);
 
         List<Meal> user1Meals = USERS_TO_MEALS.get(USER1_ID).values().stream()
@@ -98,7 +99,11 @@ public class MealServiceTest {
 
     @Test
     public void update() throws Exception {
-
+        Meal updated = new Meal(mealId, LocalDateTime.of(2016, Month.SEPTEMBER, 24, 10, 20), "Каша", 400);
+        updated.setDescription("Updated description");
+        updated.setCalories(777);
+        service.update(updated, USER1_ID);
+        MATCHER.assertEquals(updated, service.get(mealId, USER1_ID));
     }
 
     @Test
