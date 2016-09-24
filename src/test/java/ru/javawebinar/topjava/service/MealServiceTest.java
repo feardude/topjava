@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.DbPopulator;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +19,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.MealTestData.MATCHER;
 import static ru.javawebinar.topjava.UserTestData.USER1_ID;
+import static ru.javawebinar.topjava.model.BaseEntity.START_SEQ;
 
 
 @ContextConfiguration({
@@ -42,13 +45,24 @@ public class MealServiceTest {
 
     @Test
     public void testGet() throws Exception {
-//        Meal expected = USERS_TO_MEALS.get(1);
-//        MATCHER.assertEquals(expected, service.get(1, USER1_ID));
+        int mealId = START_SEQ + 3;
+        Meal expected = USERS_TO_MEALS.get(USER1_ID).get(mealId);
+        MATCHER.assertEquals(expected, service.get(mealId, USER1_ID));
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testGetNotFound() {
+        service.get(1, 1);
     }
 
     @Test
-    public void delete() throws Exception {
+    public void testDelete() throws Exception {
 
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testDeleteNotFound() {
+        service.delete(1, 1);
     }
 
     @Test
@@ -68,6 +82,11 @@ public class MealServiceTest {
                 .collect(Collectors.toList());
 
         MATCHER.assertCollectionEquals(user1Meals, service.getAll(USER1_ID));
+    }
+
+    @Test
+    public void testGetAllNotFound() {
+        Assert.assertTrue(service.getAll(1).isEmpty());
     }
 
     @Test
