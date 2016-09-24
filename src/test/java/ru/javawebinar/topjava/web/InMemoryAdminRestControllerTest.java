@@ -2,22 +2,21 @@ package ru.javawebinar.topjava.web;
 
 import org.junit.*;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
+import ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl;
+import ru.javawebinar.topjava.util.DbPopulator;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
-import javax.sql.DataSource;
-import java.util.Arrays;
 import java.util.Collection;
 
+import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.UserTestData.ADMIN;
 import static ru.javawebinar.topjava.UserTestData.USER;
 
@@ -28,17 +27,16 @@ import static ru.javawebinar.topjava.UserTestData.USER;
 @RunWith(SpringJUnit4ClassRunner.class)
 
 public class InMemoryAdminRestControllerTest {
+
     @Autowired
     private AdminRestController controller;
+
     @Autowired
-    private UserRepository repository;
+    private DbPopulator dbPopulator;
 
     @Before
     public void setUp() throws Exception {
-        // Re-initialize
-        repository.getAll().forEach(u -> repository.delete(u.getId()));
-        repository.save(USER);
-        repository.save(ADMIN);
+        dbPopulator.execute();
     }
 
     @Test
