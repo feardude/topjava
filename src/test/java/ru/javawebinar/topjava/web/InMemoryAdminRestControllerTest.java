@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl;
 import ru.javawebinar.topjava.util.DbPopulator;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.user.AdminRestController;
@@ -18,26 +19,21 @@ import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.UserTestData.ADMIN;
 import static ru.javawebinar.topjava.UserTestData.USERS;
 
-@ContextConfiguration("classpath:spring/spring-app-test.xml")
-@RunWith(SpringJUnit4ClassRunner.class)
-
 public class InMemoryAdminRestControllerTest {
 
-    private static final Logger LOG = getLogger(InMemoryAdminRestControllerTest.class);
-
-    @Autowired
-    private AdminRestController controller;
+    private final InMemoryUserRepositoryImpl repository = new InMemoryUserRepositoryImpl();
 
     @Test
-    public void testDelete() throws Exception {
-        controller.delete(UserTestData.USER1_ID);
-        Collection<User> users = controller.getAll();
-        Assert.assertEquals(users.size(), USERS.size() - 1);
-        Assert.assertEquals(users.iterator().next(), ADMIN);
+    public void testDelete() {
+        repository.delete(UserTestData.USER1_ID);
+        Collection<User> actual = repository.getAll();
+
+        Assert.assertEquals(actual.size(), USERS.size() - 1);
+        Assert.assertEquals(actual.iterator().next(), ADMIN);
     }
 
-    @Test(expected = NotFoundException.class)
-    public void testDeleteNotFound() throws Exception {
-        controller.delete(10);
+    @Test
+    public void testDeleteNotFound() {
+        Assert.assertFalse(repository.delete(10));
     }
 }

@@ -18,14 +18,16 @@ import java.util.stream.Collectors;
 
 import static ru.javawebinar.topjava.UserTestData.USERS;
 
-@Repository
 public class InMemoryUserRepositoryImpl implements UserRepository {
-    private static final Logger LOG = LoggerFactory.getLogger(InMemoryUserRepositoryImpl.class);
 
     private Map<Integer, User> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
     private static final Comparator<User> USER_COMPARATOR = Comparator.comparing(User::getName);
+
+    public InMemoryUserRepositoryImpl() {
+        repository.putAll(USERS);
+    }
 
     @Override
     public User save(User user) {
@@ -35,17 +37,6 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
         }
         repository.put(user.getId(), user);
         return user;
-    }
-
-    @PostConstruct
-    public void postConstruct() {
-        LOG.info("+++ PostConstruct");
-        repository.putAll(USERS);
-    }
-
-    @PreDestroy
-    public void preDestroy() {
-        LOG.info("+++ PreDestroy");
     }
 
     @Override
