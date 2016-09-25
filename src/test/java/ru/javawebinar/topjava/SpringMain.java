@@ -12,24 +12,27 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * User: gkislin
- * Date: 22.08.2014
- */
 public class SpringMain {
+
     public static void main(String[] args) {
-        // java 7 Automatic resource management
-        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
-            System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
-            AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
+        try (ConfigurableApplicationContext appContext = new ClassPathXmlApplicationContext("spring/spring-app-test.xml")) {
+
+            System.out.println("--- BEANS ---");
+            for (String bean : appContext.getBeanDefinitionNames()) {
+                System.out.println(bean);
+            }
+            System.out.println("--- BEANS ---");
+
+            AdminRestController adminUserController = appContext.getBean(AdminRestController.class);
             adminUserController.create(UserTestData.USER1);
             System.out.println();
 
-            MealRestController mealController = appCtx.getBean(MealRestController.class);
+            MealRestController mealController = appContext.getBean(MealRestController.class);
+
             List<MealWithExceed> filteredMealsWithExceeded =
                     mealController.getBetween(
-                            LocalDate.of(2015, Month.MAY, 30), LocalTime.of(7, 0),
-                            LocalDate.of(2015, Month.MAY, 31), LocalTime.of(11, 0));
+                            LocalDate.of(2015, Month.MAY, 1), LocalTime.of(12, 0),
+                            LocalDate.of(2015, Month.JUNE, 1), LocalTime.of(18, 0));
             filteredMealsWithExceeded.forEach(System.out::println);
         }
     }
