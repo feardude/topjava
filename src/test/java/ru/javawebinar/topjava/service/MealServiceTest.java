@@ -10,11 +10,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.DbPopulator;
+import ru.javawebinar.topjava.util.TimeUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -79,14 +84,31 @@ public class MealServiceTest {
         service.delete(mealId, USER2_ID);
     }
 
+    /*
+       (2016, Month.SEPTEMBER, 24, 10, 20), "Каша", 400));
+       (2016, Month.SEPTEMBER, 24, 15, 0), "Капуста с мясом", 650));
+       (2016, Month.SEPTEMBER, 24, 17, 30), "Кофе с конфетами", 350));
+     */
+
     @Test
     public void getBetweenDates() {
+        LocalDate startDate = LocalDate.of(2016, Month.SEPTEMBER, 24);
+        LocalDate endDate = LocalDate.of(2016, Month.SEPTEMBER, 25);
 
+        Meal meal = service.save(new Meal(endDate.atTime(LocalTime.MIN), "Омлет с сыром", 500), USER1_ID);
+        Collection<Meal> actual = service.getBetweenDates(startDate, endDate, USER1_ID);
+
+        USERS_TO_MEALS.get(USER1_ID).put(meal.getId(), meal);
+        Collection<Meal> expected = USERS_TO_MEALS.get(USER1_ID).values().stream()
+                .filter(m -> TimeUtil.isBetween(m.getDate(), startDate, endDate))
+                .sorted((m1, m2) -> m2.getDateTime().compareTo(m1.getDateTime()))
+                .collect(Collectors.toList());
+        MATCHER.assertCollectionEquals(expected, actual);
     }
 
     @Test
     public void getBetweenDateTimes() {
-
+//        service.getBetweenDateTimes();
     }
 
     @Test
