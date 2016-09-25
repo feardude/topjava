@@ -53,7 +53,7 @@ public class MealServiceTest {
     }
 
     @Test
-    public void testGet() throws Exception {
+    public void testGet() {
         Meal expected = USERS_TO_MEALS.get(USER1_ID).get(mealId);
         MATCHER.assertEquals(expected, service.get(mealId, USER1_ID));
     }
@@ -84,14 +84,8 @@ public class MealServiceTest {
         service.delete(mealId, USER2_ID);
     }
 
-    /*
-       (2016, Month.SEPTEMBER, 24, 10, 20), "Каша", 400));
-       (2016, Month.SEPTEMBER, 24, 15, 0), "Капуста с мясом", 650));
-       (2016, Month.SEPTEMBER, 24, 17, 30), "Кофе с конфетами", 350));
-     */
-
     @Test
-    public void getBetweenDates() {
+    public void testGetBetweenDates() {
         LocalDate startDate = LocalDate.of(2016, Month.SEPTEMBER, 24);
         LocalDate endDate = LocalDate.of(2016, Month.SEPTEMBER, 25);
 
@@ -103,12 +97,23 @@ public class MealServiceTest {
                 .filter(m -> TimeUtil.isBetween(m.getDate(), startDate, endDate))
                 .sorted((m1, m2) -> m2.getDateTime().compareTo(m1.getDateTime()))
                 .collect(Collectors.toList());
+
         MATCHER.assertCollectionEquals(expected, actual);
     }
 
     @Test
-    public void getBetweenDateTimes() {
-//        service.getBetweenDateTimes();
+    public void testGetBetweenDateTimes() {
+        LocalDateTime startDateTime = LocalDateTime.of(2016, Month.SEPTEMBER, 24, 12, 0);
+        LocalDateTime endDateTime = LocalDateTime.of(2016, Month.SEPTEMBER, 24, 18, 0);
+
+        Collection<Meal> expected = USERS_TO_MEALS.get(USER1_ID).values().stream()
+                .filter(m -> TimeUtil.isBetween(m.getDateTime(), startDateTime, endDateTime))
+                .sorted((m1, m2) -> m2.getDateTime().compareTo(m1.getDateTime()))
+                .collect(Collectors.toList());
+
+        Collection<Meal> actual = service.getBetweenDateTimes(startDateTime, endDateTime, USER1_ID);
+
+        MATCHER.assertCollectionEquals(expected, actual);
     }
 
     @Test
