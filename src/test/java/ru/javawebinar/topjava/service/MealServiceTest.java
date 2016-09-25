@@ -98,6 +98,9 @@ public class MealServiceTest {
                 .sorted((m1, m2) -> m2.getDateTime().compareTo(m1.getDateTime()))
                 .collect(Collectors.toList());
 
+        // Rollback TestMealData map
+        USERS_TO_MEALS.get(USER1_ID).remove(meal.getId());
+
         MATCHER.assertCollectionEquals(expected, actual);
     }
 
@@ -118,11 +121,11 @@ public class MealServiceTest {
 
     @Test
     public void testGetAll() {
-        List<Meal> user1Meals = USERS_TO_MEALS.get(USER1_ID).values().stream()
+        List<Meal> expected = USERS_TO_MEALS.get(USER1_ID).values().stream()
                 .sorted((m1, m2) -> m2.getDateTime().compareTo(m1.getDateTime()))
                 .collect(Collectors.toList());
 
-        MATCHER.assertCollectionEquals(user1Meals, service.getAll(USER1_ID));
+        MATCHER.assertCollectionEquals(expected, service.getAll(USER1_ID));
     }
 
     @Test
@@ -151,5 +154,4 @@ public class MealServiceTest {
         int expected = USERS_TO_MEALS.get(USER1_ID).size() + 1;
         Assert.assertEquals(expected, service.getAll(USER1_ID).size());
     }
-
 }
