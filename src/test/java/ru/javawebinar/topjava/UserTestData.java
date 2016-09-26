@@ -19,13 +19,6 @@ public class UserTestData {
     public static final User USER1 = new User(USER1_ID, "User 1", "user1@yandex.ru", "password", Role.ROLE_USER);
     public static final User USER2 = new User(USER2_ID, "User 2", "user2@yandex.ru", "password", Role.ROLE_USER);
 
-    public static final Map<Integer, User> USERS = new ConcurrentHashMap<>();
-    static {
-        USERS.put(ADMIN_ID, ADMIN);
-        USERS.put(USER1_ID, USER1);
-        USERS.put(USER2_ID, USER2);
-    }
-
     public static final ModelMatcher<User> MATCHER = new ModelMatcher<>(
             (expected, actual) -> expected == actual ||
                     (Objects.equals(expected.getPassword(), actual.getPassword())
@@ -34,7 +27,7 @@ public class UserTestData {
                             && Objects.equals(expected.getEmail(), actual.getEmail())
                             && Objects.equals(expected.getCaloriesPerDay(), actual.getCaloriesPerDay())
                             && Objects.equals(expected.isEnabled(), actual.isEnabled())
-//                            && Objects.equals(expected.getRoles(), actual.getRoles())
+                            && Objects.equals(expected.getRoles(), actual.getRoles())
                     )
     );
 }

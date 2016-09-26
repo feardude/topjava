@@ -15,9 +15,7 @@ import ru.javawebinar.topjava.web.user.AdminRestController;
 
 import java.util.Collection;
 
-import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.UserTestData.ADMIN;
-import static ru.javawebinar.topjava.UserTestData.USERS;
 
 public class InMemoryAdminRestControllerTest {
 

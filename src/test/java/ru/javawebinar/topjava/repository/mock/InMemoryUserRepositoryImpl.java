@@ -16,7 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static ru.javawebinar.topjava.UserTestData.USERS;
 
 @Repository
 public class InMemoryUserRepositoryImpl implements UserRepository {
