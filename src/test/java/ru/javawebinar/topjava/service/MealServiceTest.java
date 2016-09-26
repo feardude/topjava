@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -19,10 +18,8 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.MealTestData.MATCHER;
 import static ru.javawebinar.topjava.UserTestData.USER1_ID;
@@ -38,8 +35,7 @@ import static ru.javawebinar.topjava.model.BaseEntity.START_SEQ;
 
 public class MealServiceTest {
 
-    private static final Logger LOG = getLogger(MealServiceTest.class);
-    private static int mealId = START_SEQ + 3;
+    private static final int MEAL_ID = START_SEQ + 3;
 
     @Autowired
     protected MealService service;
@@ -54,8 +50,8 @@ public class MealServiceTest {
 
     @Test
     public void testGet() {
-        Meal expected = USERS_TO_MEALS.get(USER1_ID).get(mealId);
-        MATCHER.assertEquals(expected, service.get(mealId, USER1_ID));
+        Meal expected = USERS_TO_MEALS.get(USER1_ID).get(MEAL_ID);
+        MATCHER.assertEquals(expected, service.get(MEAL_ID, USER1_ID));
     }
 
     @Test(expected = NotFoundException.class)
@@ -65,10 +61,10 @@ public class MealServiceTest {
 
     @Test
     public void testDelete() throws Exception {
-        service.delete(mealId, USER1_ID);
+        service.delete(MEAL_ID, USER1_ID);
 
         List<Meal> user1Meals = USERS_TO_MEALS.get(USER1_ID).values().stream()
-                .filter(m -> m.getId() != mealId)
+                .filter(m -> m.getId() != MEAL_ID)
                 .sorted((m1, m2) -> m2.getDateTime().compareTo(m1.getDateTime()))
                 .collect(Collectors.toList());
         MATCHER.assertCollectionEquals(user1Meals, service.getAll(USER1_ID));
@@ -81,7 +77,7 @@ public class MealServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void testDeleteWrongUser() {
-        service.delete(mealId, USER2_ID);
+        service.delete(MEAL_ID, USER2_ID);
     }
 
     @Test
@@ -135,15 +131,15 @@ public class MealServiceTest {
 
     @Test
     public void testUpdate() {
-        Meal updated = new Meal(mealId, LocalDateTime.of(2016, Month.SEPTEMBER, 24, 10, 20), "Каша", 400);
+        Meal updated = new Meal(MEAL_ID, LocalDateTime.of(2016, Month.SEPTEMBER, 24, 10, 20), "Каша", 400);
         updated.setDescription("Updated description");
         service.update(updated, USER1_ID);
-        MATCHER.assertEquals(updated, service.get(mealId, USER1_ID));
+        MATCHER.assertEquals(updated, service.get(MEAL_ID, USER1_ID));
     }
 
     @Test(expected = NotFoundException.class)
     public void testUpdateWrongUser() {
-        Meal updated = new Meal(mealId, LocalDateTime.of(2016, Month.SEPTEMBER, 24, 10, 20), "Каша", 400);
+        Meal updated = new Meal(MEAL_ID, LocalDateTime.of(2016, Month.SEPTEMBER, 24, 10, 20), "Каша", 400);
         updated.setDescription("Updated description");
         service.update(updated, USER2_ID);
     }
