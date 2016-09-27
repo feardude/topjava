@@ -26,7 +26,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     private static final Comparator<User> USER_COMPARATOR = Comparator.comparing(User::getName);
 
     public InMemoryUserRepositoryImpl() {
-        repository.putAll(USERS);
+//        repository.putAll(USERS);
     }
 
     @Override

@@ -17,7 +17,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,16 +60,10 @@ public class MealServiceTest {
         service.get(1, 1);
     }
 
-    //TODO refactor
     @Test
     public void testDelete() throws Exception {
         service.delete(MEAL_ID, USER1_ID);
-
-//        List<Meal> user1Meals = USERS_TO_MEALS.get(USER1_ID).values().stream()
-//                .filter(m -> m.getId() != MEAL_ID)
-//                .sorted((m1, m2) -> m2.getDateTime().compareTo(m1.getDateTime()))
-//                .collect(Collectors.toList());
-//        MATCHER.assertCollectionEquals(user1Meals, service.getAll(USER1_ID));
+        MATCHER.assertCollectionEquals(Arrays.asList(meal3, meal2), service.getAll(USER1_ID));
     }
 
     @Test(expected = NotFoundException.class)
@@ -80,51 +76,32 @@ public class MealServiceTest {
         service.delete(MEAL_ID, USER2_ID);
     }
 
-    //TODO refactor
     @Test
     public void testGetBetweenDates() {
-        LocalDate startDate = LocalDate.of(2016, Month.SEPTEMBER, 24);
-        LocalDate endDate = LocalDate.of(2016, Month.SEPTEMBER, 25);
+        LocalDate startDate;
+        LocalDate endDate = startDate = LocalDate.of(2016, Month.SEPTEMBER, 25);
 
-        Meal meal = service.save(new Meal(endDate.atTime(LocalTime.MIN), "Омлет с сыром", 500), USER1_ID);
         Collection<Meal> actual = service.getBetweenDates(startDate, endDate, USER1_ID);
+        Collection<Meal> expected = Collections.singletonList(meal3);
 
-//        USERS_TO_MEALS.get(USER1_ID).put(meal.getId(), meal);
-//        Collection<Meal> expected = USERS_TO_MEALS.get(USER1_ID).values().stream()
-//                .filter(m -> TimeUtil.isBetween(m.getDate(), startDate, endDate))
-//                .sorted((m1, m2) -> m2.getDateTime().compareTo(m1.getDateTime()))
-//                .collect(Collectors.toList());
-//
-//        // Rollback TestMealData map
-//        USERS_TO_MEALS.get(USER1_ID).remove(meal.getId());
-
-//        MATCHER.assertCollectionEquals(expected, actual);
+        MATCHER.assertCollectionEquals(expected, actual);
     }
 
-    //TODO refactor
     @Test
     public void testGetBetweenDateTimes() {
         LocalDateTime startDateTime = LocalDateTime.of(2016, Month.SEPTEMBER, 24, 12, 0);
         LocalDateTime endDateTime = LocalDateTime.of(2016, Month.SEPTEMBER, 24, 18, 0);
 
-//        Collection<Meal> expected = USERS_TO_MEALS.get(USER1_ID).values().stream()
-//                .filter(m -> TimeUtil.isBetween(m.getDateTime(), startDateTime, endDateTime))
-//                .sorted((m1, m2) -> m2.getDateTime().compareTo(m1.getDateTime()))
-//                .collect(Collectors.toList());
-
+        Collection<Meal> expected = Arrays.asList(meal2);
         Collection<Meal> actual = service.getBetweenDateTimes(startDateTime, endDateTime, USER1_ID);
 
-//        MATCHER.assertCollectionEquals(expected, actual);
+        MATCHER.assertCollectionEquals(expected, actual);
     }
 
-    //TODO refactor
     @Test
     public void testGetAll() {
-//        List<Meal> expected = USERS_TO_MEALS.get(USER1_ID).values().stream()
-//                .sorted((m1, m2) -> m2.getDateTime().compareTo(m1.getDateTime()))
-//                .collect(Collectors.toList());
-
-//        MATCHER.assertCollectionEquals(expected, service.getAll(USER1_ID));
+        List<Meal> expected = Arrays.asList(meal3, meal2, meal1);
+        MATCHER.assertCollectionEquals(expected, service.getAll(USER1_ID));
     }
 
     @Test
@@ -147,11 +124,9 @@ public class MealServiceTest {
         service.update(updated, USER2_ID);
     }
 
-    //TODO refactor
     @Test
     public void testSave() {
         service.save(new Meal(LocalDateTime.of(2016, Month.SEPTEMBER, 24, 10, 20), "Новая еда", 1000), USER1_ID);
-//        int expected = USERS_TO_MEALS.get(USER1_ID).size() + 1;
-//        Assert.assertEquals(expected, service.getAll(USER1_ID).size());
+        Assert.assertEquals(4, service.getAll(USER1_ID).size());
     }
 }
