@@ -33,4 +33,4 @@ CREATE TABLE meals
   calories      integer not null,
   userid        integer references users(id)
 );
-CREATE INDEX meals_userid_fkey ON meals (userid);
+CREATE INDEX meals_userid_datetime_idx ON meals (userid, datetime);
