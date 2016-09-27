@@ -9,7 +9,6 @@ import ru.javawebinar.topjava.web.user.AdminRestController;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
-import java.util.Arrays;
 import java.util.List;
 
 public class SpringMain {
