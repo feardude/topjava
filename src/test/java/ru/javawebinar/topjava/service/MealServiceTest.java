@@ -89,7 +89,7 @@ public class MealServiceTest {
         LocalDateTime startDateTime = LocalDateTime.of(2016, Month.SEPTEMBER, 24, 12, 0);
         LocalDateTime endDateTime = LocalDateTime.of(2016, Month.SEPTEMBER, 24, 18, 0);
 
-        Collection<Meal> expected = Arrays.asList(meal2);
+        Collection<Meal> expected = Collections.singletonList(meal2);
         Collection<Meal> actual = service.getBetweenDateTimes(startDateTime, endDateTime, USER1_ID);
 
         MATCHER.assertCollectionEquals(expected, actual);
