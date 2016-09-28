@@ -49,7 +49,7 @@ public class MealServiceTest {
 
     @Test
     public void testGet() {
-        MATCHER.assertEquals(meal1, service.get(meal1.getId(), USER1_ID));
+        MATCHER.assertEquals(MEAL_1, service.get(MEAL_1.getId(), USER1_ID));
     }
 
     @Test(expected = NotFoundException.class)
@@ -60,7 +60,7 @@ public class MealServiceTest {
     @Test
     public void testDelete() throws Exception {
         service.delete(MEAL_ID, USER1_ID);
-        MATCHER.assertCollectionEquals(Arrays.asList(meal3, meal2), service.getAll(USER1_ID));
+        MATCHER.assertCollectionEquals(Arrays.asList(MEAL_3, MEAL_2), service.getAll(USER1_ID));
     }
 
     @Test(expected = NotFoundException.class)
@@ -79,7 +79,7 @@ public class MealServiceTest {
         LocalDate endDate = startDate = LocalDate.of(2016, Month.SEPTEMBER, 25);
 
         Collection<Meal> actual = service.getBetweenDates(startDate, endDate, USER1_ID);
-        Collection<Meal> expected = Collections.singletonList(meal3);
+        Collection<Meal> expected = Collections.singletonList(MEAL_3);
 
         MATCHER.assertCollectionEquals(expected, actual);
     }
@@ -89,7 +89,7 @@ public class MealServiceTest {
         LocalDateTime startDateTime = LocalDateTime.of(2016, Month.SEPTEMBER, 24, 12, 0);
         LocalDateTime endDateTime = LocalDateTime.of(2016, Month.SEPTEMBER, 24, 18, 0);
 
-        Collection<Meal> expected = Collections.singletonList(meal2);
+        Collection<Meal> expected = Collections.singletonList(MEAL_2);
         Collection<Meal> actual = service.getBetweenDateTimes(startDateTime, endDateTime, USER1_ID);
 
         MATCHER.assertCollectionEquals(expected, actual);
@@ -97,7 +97,7 @@ public class MealServiceTest {
 
     @Test
     public void testGetAll() {
-        List<Meal> expected = Arrays.asList(meal3, meal2, meal1);
+        List<Meal> expected = Arrays.asList(MEAL_3, MEAL_2, MEAL_1);
         MATCHER.assertCollectionEquals(expected, service.getAll(USER1_ID));
     }
 
