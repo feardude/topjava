@@ -1,23 +1,30 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-/**
- * GKislin
- * 11.01.2015.
- */
+@Entity
+@Table(name = "meals")
 public class Meal extends BaseEntity {
+
+    @Column(name = "datetime", nullable = false)
+    @NotEmpty
     private LocalDateTime dateTime;
 
+    @Column(name = "description", nullable = false)
+    @NotEmpty
     private String description;
 
+    @Column(name = "calories", nullable = false)
+    @NotEmpty
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="userid", nullable = false)
     private User user;
 
     public Meal() {
@@ -37,19 +44,15 @@ public class Meal extends BaseEntity {
     public LocalDateTime getDateTime() {
         return dateTime;
     }
-
     public String getDescription() {
         return description;
     }
-
     public int getCalories() {
         return calories;
     }
-
     public LocalDate getDate() {
         return dateTime.toLocalDate();
     }
-
     public LocalTime getTime() {
         return dateTime.toLocalTime();
     }
@@ -57,11 +60,9 @@ public class Meal extends BaseEntity {
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
-
     public void setCalories(int calories) {
         this.calories = calories;
     }
@@ -69,7 +70,6 @@ public class Meal extends BaseEntity {
     public User getUser() {
         return user;
     }
-
     public void setUser(User user) {
         this.user = user;
     }
