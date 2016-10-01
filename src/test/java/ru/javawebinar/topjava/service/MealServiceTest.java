@@ -32,7 +32,7 @@ public class MealServiceTest {
 
     @Test
     public void testDelete() throws Exception {
-        service.delete(MealTestData.MEAL1_ID, USER_ID);
+        service.delete(MEAL1_ID, USER_ID);
         MATCHER.assertCollectionEquals(Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2), service.getAll(USER_ID));
     }
 
