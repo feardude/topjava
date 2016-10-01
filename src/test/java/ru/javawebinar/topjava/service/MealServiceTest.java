@@ -49,6 +49,13 @@ public class MealServiceTest {
     }
 
     @Test
+    public void testUpdate() throws Exception {
+        Meal updated = getUpdated();
+        service.update(updated, USER_ID);
+        MATCHER.assertEquals(updated, service.get(MEAL1_ID, USER_ID));
+    }
+
+    @Test
     public void testGet() throws Exception {
         Meal actual = service.get(ADMIN_MEAL_ID, ADMIN_ID);
         MATCHER.assertEquals(ADMIN_MEAL1, actual);
@@ -57,13 +64,6 @@ public class MealServiceTest {
     @Test(expected = NotFoundException.class)
     public void testGetNotFound() throws Exception {
         service.get(MEAL1_ID, ADMIN_ID);
-    }
-
-    @Test
-    public void testUpdate() throws Exception {
-        Meal updated = getUpdated();
-        service.update(updated, USER_ID);
-        MATCHER.assertEquals(updated, service.get(MEAL1_ID, USER_ID));
     }
 
     @Test(expected = NotFoundException.class)

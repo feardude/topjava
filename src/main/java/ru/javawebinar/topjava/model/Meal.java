@@ -7,12 +7,35 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+
+@NamedQueries({
+        @NamedQuery(name = Meal.BY_ID_AND_USERID, query = "select m from Meal m where m.id=?1 and m.user.id=?2"),
+        @NamedQuery(name = Meal.ALL_SORTED, query = "select m from Meal m " +
+                                                    "where m.user.id=?1 " +
+                                                    "and m.dateTime between ?2 and ?3 " +
+                                                    "order by m.dateTime desc"),
+        @NamedQuery(name = Meal.DELETE, query = "delete from Meal m " +
+                                                "where m.id=:id " +
+                                                "and m.user.id=:userId"),
+        @NamedQuery(name = Meal.UPDATE, query = "update Meal m " +
+                "set m.description = :description, " +
+                "m.dateTime = :dateTime, " +
+                "m.calories = :calories " +
+                "where m.user.id = :userId " +
+                "and m.id = :id")
+})
 @Entity
-@Table(name = "meals")
+@Table(name = "meals", uniqueConstraints = @UniqueConstraint(name = "meals_unique_user_datetime_idx",
+                                                             columnNames = {"userid", "datetime"})
+)
 public class Meal extends BaseEntity {
 
+    public static final String BY_ID_AND_USERID = "Meal.getByIdAndUserid";
+    public static final String ALL_SORTED = "Meal.getAllSorted";
+    public static final String DELETE = "Meal.delete";
+    public static final String UPDATE = "Meal.update";
+
     @Column(name = "datetime", nullable = false)
-    @NotEmpty
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
@@ -20,11 +43,10 @@ public class Meal extends BaseEntity {
     private String description;
 
     @Column(name = "calories", nullable = false)
-    @NotEmpty
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="userid", nullable = false)
+    @JoinColumn(name = "userid", referencedColumnName = "id")
     private User user;
 
     public Meal() {
