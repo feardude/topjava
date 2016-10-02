@@ -6,11 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.TimeUtil;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Repository
@@ -60,8 +62,8 @@ public class JpaMealRepositoryImpl implements MealRepository {
     @Override
     public List<Meal> getAll(int userId) {
         return getBetween(
-                LocalDateTime.of(1970, 1, 1, 0, 0),
-                LocalDateTime.of(3000, 1, 1, 0, 0),
+                TimeUtil.MIN_DATE.atTime(0, 0),
+                TimeUtil.MAX_DATE.atTime(0, 0),
                 userId);
     }
 
@@ -69,8 +71,9 @@ public class JpaMealRepositoryImpl implements MealRepository {
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
         return em.createNamedQuery(Meal.ALL_SORTED, Meal.class)
                 .setParameter(1, userId)
-                .setParameter(2, startDate)
-                .setParameter(3, endDate)
-                .getResultList();
+                .getResultList()
+                .stream()
+                .filter(m -> TimeUtil.isBetween(m.getDateTime(), startDate, endDate))
+                .collect(Collectors.toList());
     }
 }

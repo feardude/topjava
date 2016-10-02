@@ -10,19 +10,21 @@ import java.time.LocalTime;
 
 @NamedQueries({
         @NamedQuery(name = Meal.BY_ID_AND_USERID, query = "select m from Meal m where m.id=?1 and m.user.id=?2"),
+
         @NamedQuery(name = Meal.ALL_SORTED, query = "select m from Meal m " +
                                                     "where m.user.id=?1 " +
-                                                    "and m.dateTime between ?2 and ?3 " +
                                                     "order by m.dateTime desc"),
+
         @NamedQuery(name = Meal.DELETE, query = "delete from Meal m " +
                                                 "where m.id=:id " +
                                                 "and m.user.id=:userId"),
+
         @NamedQuery(name = Meal.UPDATE, query = "update Meal m " +
-                "set m.description = :description, " +
-                "m.dateTime = :dateTime, " +
-                "m.calories = :calories " +
-                "where m.user.id = :userId " +
-                "and m.id = :id")
+                                                "set m.description = :description, " +
+                                                "m.dateTime = :dateTime, " +
+                                                "m.calories = :calories " +
+                                                "where m.user.id = :userId " +
+                                                "and m.id = :id")
 })
 @Entity
 @Table(name = "meals", uniqueConstraints = @UniqueConstraint(name = "meals_unique_user_datetime_idx",
