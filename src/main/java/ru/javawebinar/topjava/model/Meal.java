@@ -26,7 +26,7 @@ import java.time.LocalTime;
 })
 @Entity
 @Table(name = "meals", uniqueConstraints = @UniqueConstraint(name = "meals_unique_user_datetime_idx",
-                                                             columnNames = {"userid", "datetime"})
+                                                             columnNames = {"user_id", "datetime"})
 )
 public class Meal extends BaseEntity {
 
@@ -46,7 +46,7 @@ public class Meal extends BaseEntity {
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userid", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     public Meal() {
