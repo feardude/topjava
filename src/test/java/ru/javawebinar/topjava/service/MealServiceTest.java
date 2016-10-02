@@ -41,6 +41,12 @@ public class MealServiceTest {
     private static Map<String, Double> testDuration = new HashMap<>();
 
     @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    @Autowired
+    protected MealService service;
+
+    @Rule
     public Stopwatch stopwatch = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
@@ -59,12 +65,6 @@ public class MealServiceTest {
         }
         LOG.info("--------------------------------");
     }
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
-    @Autowired
-    protected MealService service;
 
     @Test
     public void testDelete() throws Exception {
