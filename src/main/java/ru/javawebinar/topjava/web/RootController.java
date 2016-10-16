@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.service.UserService;
+import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,10 +20,14 @@ public class RootController {
     @Autowired
     private UserService service;
 
+    @Autowired
+    private MealRestController mealRestController;
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String root() {
         return "index";
     }
+
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public String users(Model model) {
@@ -35,5 +40,12 @@ public class RootController {
         int userId = Integer.valueOf(request.getParameter("userId"));
         AuthorizedUser.setId(userId);
         return "redirect:meals";
+    }
+
+
+    @RequestMapping(value = "/meals", method = RequestMethod.GET)
+    public String meals(Model model) {
+        model.addAttribute("meals", mealRestController.getAll());
+        return "meals";
     }
 }
