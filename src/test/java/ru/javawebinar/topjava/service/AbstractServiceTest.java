@@ -18,9 +18,6 @@ import java.util.concurrent.TimeUnit;
 
 import static ru.javawebinar.topjava.Profiles.ACTIVE_DB;
 
-/**
- * User: gkislin
- */
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
@@ -29,6 +26,7 @@ import static ru.javawebinar.topjava.Profiles.ACTIVE_DB;
 @ActiveProfiles(ACTIVE_DB)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 abstract public class AbstractServiceTest {
+
     private static final Logger LOG = LoggerFactory.getLogger(AbstractServiceTest.class);
 
     private static StringBuilder results = new StringBuilder();
